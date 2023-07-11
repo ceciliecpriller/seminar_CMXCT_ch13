@@ -9,10 +9,6 @@ end
 %generation of a 2-D parallel-beam tomography problem
 N = 200; theta = 0:5:179; p = 2*N;
 [A, b, x] = paralleltomo(N,theta,p);
-x = reshape(x,N,N);
-subplot(2, 2, 1);
-imshow(x, []);
-title('Original Phantom');
 
 %define starting point
 x_0 = zeros(N*N, 1);
@@ -21,12 +17,12 @@ x_0 = zeros(N*N, 1);
 epsilon = 1e-3;
 
 %define provisory step size
-t = 0.25;
+t = 0.05;
 
 %define current number of iterations
 iteration = 0;
 
-%define strating vector
+%define starting vector
 currentX = x_0;
 x_minus1 = zeros(N*N, 1);
 
@@ -70,6 +66,11 @@ while and(norm(grad_f)>=epsilon, iteration<maxiterations)
     currentX = newX;
     grad_f = grad(currentX, A, b);
 end 
+
+x = reshape(x,N,N);
+subplot(2, 2, 1);
+imshow(x, []);
+title('Original Phantom');
 
 x_grad = reshape(currentX, [N, N]);
 subplot(2, 2, 2);
