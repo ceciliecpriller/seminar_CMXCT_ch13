@@ -1,4 +1,8 @@
 function [] = gradientmethod(step_size_method, maxiterations)
+%function that uses the gradient method to approximate the least-squares solution of 1/2||Ax-b||²_2
+%:param step_size_method: choice of step sizes methods between 'exact line search', 'backtracking line %search', 'BB1 step sizes' and 'BB2 step sizes'
+%:param maxiterations: maximum number of iterations
+
 
 %set default step size method
 if isempty(step_size_method)
@@ -53,7 +57,7 @@ while and(norm(grad_f)>=epsilon, iteration<maxiterations)
         otherwise
     end
     
-    %calculate this iteration's x
+    %calculate new x
     newX = currentX- t*grad_f;
 
     if ~isfinite(newX)
@@ -67,6 +71,7 @@ while and(norm(grad_f)>=epsilon, iteration<maxiterations)
     grad_f = grad(currentX, A, b);
 end 
 
+%plot original phantom and result
 x = reshape(x,N,N);
 subplot(2, 2, 1);
 imshow(x, []);
@@ -81,7 +86,7 @@ title(sprintf('Approximated phantom in %d iterations', iteration));
 function g = grad(x, A, b)
 g = A'*(A*x-b);
 
-%Backtracking line search with alpha = 1e-2 and beta = 0.5
+%backtracking line search with alpha = 1e-2 and beta = 0.5
 function t_k = backtracking(x, func, A, b)
 t_k = 1;
 alpha = 1e-2;
